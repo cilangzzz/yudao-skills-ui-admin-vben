@@ -177,7 +177,7 @@ catalog:
   tailwindcss: ^4.2.2
   tdesign-vue-next: ^1.18.5
   theme-colors: ^0.1.0
-  tinymce: ^7.3.0
+  tinymce: ^8.3.2
   tippy.js: ^6.3.7
   tsdown: ^0.21.4
   turbo: ^2.8.20
