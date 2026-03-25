@@ -1,0 +1,312 @@
+# Skill 文档 - Ant Design 应用模块
+# apps/web-antd 完整知识提取
+
+skill:
+  id: "skill-app-antd"
+  name: "Ant Design App Skill"
+  version: "1.0.0"
+  module_path: "apps/web-antd"
+  created_at: "2026-03-25"
+  updated_at: "2026-03-25"
+
+# ============================================
+# 第一阶段：设计理念
+# ============================================
+philosophy:
+  business_position: |
+    web-antd 是基于 Ant Design Vue 的主应用实现：
+    - 完整的后台管理系统前端
+    - 集成权限、路由、状态管理、API层
+    - 支持动态路由、权限控制、多租户
+    - 丰富的业务组件和页面模板
+
+    作为主要推荐版本，其他UI框架版本参考此结构实现。
+
+  design_principles:
+    - principle: "模块化路由"
+      description: "路由按业务模块划分，支持动态加载和权限控制"
+    - principle: "适配器模式"
+      description: "通过适配器层适配不同UI框架组件"
+    - principle: "状态分层管理"
+      description: "框架层Store和应用层Store分离"
+    - principle: "API模块化"
+      description: "API按业务模块划分，统一namespace管理"
+
+# ============================================
+# 第二阶段：架构设计
+# ============================================
+architecture:
+  directory_structure:
+    layers:
+      - name: "src/adapter/"
+        modules: ["component.ts", "form.ts", "table.ts", "index.ts"]
+        purpose: "适配器层 - 组件、表单、表格适配"
+      - name: "src/api/"
+        modules: ["system/", "infra/", "bpm/", "..."]
+        purpose: "API层 - 按业务模块划分"
+      - name: "src/components/"
+        modules: ["Upload/", "TableAction/", "DictTag/", "Tinymce/", "FormCreate/"]
+        purpose: "业务组件"
+      - name: "src/layouts/"
+        modules: ["basic.vue", "auth.vue"]
+        purpose: "布局组件"
+      - name: "src/router/"
+        modules: ["routes/modules/", "guard/", "access.ts"]
+        purpose: "路由配置"
+      - name: "src/store/"
+        modules: ["auth.ts"]
+        purpose: "应用层状态"
+      - name: "src/views/"
+        modules: ["system/", "infra/", "bpm/", "..."]
+        purpose: "页面视图"
+
+  dependencies:
+    internal:
+      - package: "@vben/layouts"
+        purpose: "布局组件"
+      - package: "@vben/request"
+        purpose: "请求封装"
+      - package: "@vben/access"
+        purpose: "权限控制"
+      - package: "@vben/stores"
+        purpose: "状态管理"
+      - package: "@vben/hooks"
+        purpose: "自定义Hooks"
+    external:
+      - package: "ant-design-vue"
+        version: "^4.2.6"
+        purpose: "UI组件库"
+      - package: "vxe-table"
+        version: "^4.18.5"
+        purpose: "高级表格"
+      - package: "echarts"
+        version: "^6.0.0"
+        purpose: "图表库"
+
+  design_patterns:
+    - pattern: "适配器模式"
+      location: "src/adapter/"
+      purpose: "适配Ant Design Vue组件到框架抽象"
+    - pattern: "模块化模式"
+      location: "src/router/routes/modules/"
+      purpose: "按业务模块组织路由"
+    - pattern: "仓储模式"
+      location: "src/api/"
+      purpose: "API接口统一管理"
+
+# ============================================
+# 第三阶段：核心实现
+# ============================================
+implementation:
+  types:
+    - name: "AppRouteRecordRaw"
+      file: "src/router/types.ts"
+      description: "应用路由类型"
+
+  components:
+    - name: "Upload"
+      path: "src/components/Upload/"
+      description: "文件上传组件"
+    - name: "TableAction"
+      path: "src/components/TableAction/"
+      description: "表格操作列组件"
+    - name: "DictTag"
+      path: "src/components/DictTag/"
+      description: "字典标签组件"
+    - name: "Tinymce"
+      path: "src/components/Tinymce/"
+      description: "富文本编辑器"
+    - name: "FormCreate"
+      path: "src/components/FormCreate/"
+      description: "表单设计器"
+
+  functions:
+    - name: "setupRouter(app)"
+      file: "src/router/index.ts"
+      description: "路由初始化"
+    - name: "setupStore(app)"
+      file: "src/store/index.ts"
+      description: "状态初始化"
+    - name: "initAccessGuard()"
+      file: "src/router/guard/"
+      description: "路由守卫初始化"
+
+  configurations:
+    - name: "路由模块配置"
+      example: |
+        // src/router/routes/modules/system.ts
+        export default {
+          path: '/system',
+          name: 'System',
+          component: () => import('#/layouts/basic.vue'),
+          children: [
+            {
+              path: 'user',
+              name: 'SystemUser',
+              component: () => import('#/views/system/user/index.vue'),
+              meta: { title: '用户管理', icon: 'ep:user' }
+            }
+          ]
+        };
+
+    - name: "API模块配置"
+      example: |
+        // src/api/system/user/index.ts
+        import { requestClient } from '#/api/request';
+
+        export namespace UserApi {
+          export const getList = (params) =>
+            requestClient.get('/system/user/page', { params });
+
+          export const create = (data) =>
+            requestClient.post('/system/user/create', data);
+        }
+
+    - name: "适配器配置"
+      example: |
+        // src/adapter/form.ts
+        import { Input, Select, DatePicker } from 'ant-design-vue';
+
+        export const formComponents = {
+          Input,
+          Select,
+          DatePicker,
+          // 自定义组件
+          MyCustomInput: defineAsyncComponent(() => import('#/components/MyInput'))
+        };
+
+# ============================================
+# 第四阶段：代码使用设计
+# ============================================
+code_patterns:
+  component_usage:
+    example: |
+      <!-- CRUD页面模板 -->
+      <!-- views/system/user/index.vue -->
+      <script setup lang="ts">
+      import { useVbenVxeGrid } from '#/adapter/table';
+      import { UserApi } from '#/api/system/user';
+
+      const [Grid, gridApi] = useVbenVxeGrid({
+        columns: [
+          { field: 'username', title: '用户名' },
+          { field: 'nickname', title: '昵称' }
+        ],
+        proxyConfig: {
+          ajax: {
+            query: async ({ page }) => {
+              const res = await UserApi.getList(page);
+              return { items: res.list, total: res.total };
+            }
+          }
+        }
+      });
+      </script>
+
+      <template>
+        <Grid />
+      </template>
+
+  api_usage:
+    example: |
+      // API调用示例
+      import { UserApi } from '#/api/system/user';
+
+      // 列表查询
+      const { list, total } = await UserApi.getList({ pageNum: 1, pageSize: 10 });
+
+      // 创建
+      await UserApi.create({ username: 'test', nickname: '测试' });
+
+      // 更新
+      await UserApi.update({ id: 1, nickname: '新昵称' });
+
+      // 删除
+      await UserApi.delete(1);
+
+  route_usage:
+    example: |
+      // 路由跳转
+      import { useRouter } from 'vue-router';
+
+      const router = useRouter();
+      router.push('/system/user');
+
+      // 带参数跳转
+      router.push({ name: 'SystemUser', query: { id: 1 } });
+
+  naming_conventions:
+    - convention: "API文件"
+      rule: "按业务模块划分（如 api/system/user/）"
+    - convention: "视图文件"
+      rule: "按业务模块划分（如 views/system/user/）"
+    - convention: "路由文件"
+      rule: "routes/modules/xxx.ts"
+
+  crud_template:
+    description: "标准CRUD页面结构"
+    structure: |
+      views/module/feature/
+      ├── index.vue        # 列表页
+      ├── data.ts          # 表格/表单配置
+      └── modules/
+          └── form.vue     # 表单弹窗
+
+# ============================================
+# 第五阶段：扩展指南
+# ============================================
+extension_guide:
+  new_feature:
+    title: "新增业务模块"
+    steps:
+      - step: "1. 创建路由模块"
+        detail: "在 src/router/routes/modules/ 下创建路由文件"
+      - step: "2. 创建API模块"
+        detail: "在 src/api/ 下创建API接口文件"
+      - step: "3. 创建页面组件"
+        detail: "在 src/views/ 下创建页面目录和组件"
+      - step: "4. 添加菜单配置"
+        detail: "在后端系统管理中配置菜单和权限"
+      - step: "5. 配置权限标识"
+        detail: "在Controller中使用@PreAuthorize注解"
+
+  new_component:
+    title: "新增业务组件"
+    steps:
+      - step: "1. 创建组件目录"
+        detail: "在 src/components/ 下创建组件目录"
+      - step: "2. 实现组件"
+        detail: "编写Vue组件，遵循命名规范"
+      - step: "3. 导出组件"
+        detail: "在 src/components/index.ts 中导出"
+      - step: "4. 注册适配器"
+        detail: "如果需要在表单中使用，在adapter中注册"
+
+  best_practices:
+    - practice: "路由懒加载"
+      detail: "使用动态import实现路由懒加载，减少首屏加载时间"
+    - practice: "API统一管理"
+      detail: "所有API接口集中在api目录，使用namespace管理"
+    - practice: "表格复用"
+      detail: "使用useVbenVxeGrid Hook统一表格配置"
+    - practice: "表单Schema配置"
+      detail: "使用Schema配置生成表单，提高复用性"
+    - practice: "权限控制"
+      detail: "使用v-access指令或hasAccessByCodes控制按钮显示"
+
+# ============================================
+# 关键文件清单
+# ============================================
+key_files:
+  - path: "apps/web-antd/src/main.ts"
+    purpose: "应用入口"
+  - path: "apps/web-antd/src/router/index.ts"
+    purpose: "路由配置入口"
+  - path: "apps/web-antd/src/router/guard/"
+    purpose: "路由守卫"
+  - path: "apps/web-antd/src/api/request.ts"
+    purpose: "请求客户端配置"
+  - path: "apps/web-antd/src/adapter/"
+    purpose: "组件适配器"
+  - path: "apps/web-antd/src/store/auth.ts"
+    purpose: "认证状态"

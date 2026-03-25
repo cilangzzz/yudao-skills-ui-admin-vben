@@ -1,0 +1,291 @@
+# Skill 文档 - 效应层模块
+# packages/effects 完整知识提取
+
+skill:
+  id: "skill-effects"
+  name: "Effects Layer Skill"
+  version: "1.0.0"
+  module_path: "packages/effects"
+  created_at: "2026-03-25"
+  updated_at: "2026-03-25"
+
+# ============================================
+# 第一阶段：设计理念
+# ============================================
+philosophy:
+  business_position: |
+    effects 是业务效应层，提供跨应用共享的业务功能实现：
+    - access/: 权限控制（角色权限、权限码、路由守卫）
+    - request/: HTTP请求封装（Axios、拦截器、SSE支持）
+    - hooks/: 自定义组合式函数（usePagination、useDict、useWatermark等）
+    - layouts/: 布局组件（basic、authentication）
+    - plugins/: 插件系统（echarts、vxe-table、codemirror等）
+    - common-ui/: 通用业务组件（Page、EllipsisText、IconPicker等）
+
+    该层位于核心层之上，整合具体UI框架特性，提供业务级功能。
+
+  design_principles:
+    - principle: "业务导向"
+      description: "效应层组件针对具体业务场景设计，提供开箱即用的功能"
+    - principle: "UI框架集成"
+      description: "整合Ant Design Vue等UI框架特性，提供统一的组件接口"
+    - principle: "可插拔设计"
+      description: "插件系统支持按需加载，减少打包体积"
+    - principle: "请求拦截"
+      description: "统一的请求/响应拦截器处理Token、租户、加密等"
+
+  tech_choices:
+    - choice: "Axios"
+      reason: "成熟的HTTP客户端，拦截器机制完善"
+    - choice: "Pinia"
+      reason: "Vue 3官方推荐的状态管理，组合式API友好"
+    - choice: "vee-validate + zod"
+      reason: "表单验证方案，支持Schema验证"
+
+# ============================================
+# 第二阶段：架构设计
+# ============================================
+architecture:
+  directory_structure:
+    layers:
+      - name: "effects/access/"
+        modules: ["src/"]
+        purpose: "权限控制"
+      - name: "effects/request/"
+        modules: ["src/"]
+        purpose: "HTTP请求封装"
+      - name: "effects/hooks/"
+        modules: ["src/"]
+        purpose: "自定义Hooks"
+      - name: "effects/layouts/"
+        modules: ["src/basic/", "src/authentication/", "src/widgets/"]
+        purpose: "布局组件"
+      - name: "effects/plugins/"
+        modules: ["src/"]
+        purpose: "插件系统"
+      - name: "effects/common-ui/"
+        modules: ["src/"]
+        purpose: "通用业务组件"
+
+  dependencies:
+    internal:
+      - package: "@vben-core/*"
+        purpose: "核心层组件和函数"
+      - package: "@vben/stores"
+        purpose: "状态管理"
+      - package: "@vben/types"
+        purpose: "类型定义"
+    external:
+      - package: "axios"
+        version: "^1.13.6"
+        purpose: "HTTP客户端"
+      - package: "pinia"
+        version: "^3.0.4"
+        purpose: "状态管理"
+      - package: "echarts"
+        version: "^6.0.0"
+        purpose: "图表库"
+      - package: "vxe-table"
+        version: "^4.18.5"
+        purpose: "高级表格"
+
+  design_patterns:
+    - pattern: "适配器模式"
+      location: "effects/request"
+      purpose: "统一不同请求类型的接口（HTTP、SSE、Upload）"
+    - pattern: "装饰器模式"
+      location: "effects/request/src/request-client"
+      purpose: "拦截器增强请求功能"
+    - pattern: "策略模式"
+      location: "effects/access"
+      purpose: "不同权限控制策略（角色/权限码）"
+    - pattern: "组合模式"
+      location: "effects/layouts"
+      purpose: "布局组件嵌套结构"
+
+# ============================================
+# 第三阶段：核心实现
+# ============================================
+implementation:
+  types:
+    - name: "RequestClientConfig"
+      file: "effects/request/src/types.ts"
+      description: "请求客户端配置类型"
+    - name: "AccessMode"
+      file: "effects/access/src/types.ts"
+      description: "权限模式类型"
+
+  components:
+    - name: "BasicLayout"
+      package: "effects/layouts"
+      description: "主布局组件"
+    - name: "AuthLayout"
+      package: "effects/layouts"
+      description: "认证布局组件"
+    - name: "Page / ContentWrap"
+      package: "effects/common-ui"
+      description: "页面容器组件"
+    - name: "EllipsisText"
+      package: "effects/common-ui"
+      description: "省略文本组件"
+    - name: "IconPicker"
+      package: "effects/common-ui"
+      description: "图标选择器"
+
+  functions:
+    - name: "useAccess()"
+      file: "effects/access/src/use-access.ts"
+      description: "权限判断Hook"
+    - name: "usePagination()"
+      file: "effects/hooks/src/use-pagination.ts"
+      description: "分页逻辑Hook"
+    - name: "useDict()"
+      file: "effects/hooks/src/use-dict.ts"
+      description: "字典数据Hook"
+    - name: "useWatermark()"
+      file: "effects/hooks/src/use-watermark.ts"
+      description: "水印功能Hook"
+    - name: "useTabs()"
+      file: "effects/hooks/src/use-tabs.ts"
+      description: "标签页操作Hook"
+
+  configurations:
+    - name: "RequestClient初始化"
+      example: |
+        import { RequestClient } from '@vben/request';
+
+        const client = new RequestClient({
+          baseURL: '/api',
+          timeout: 10000
+        });
+
+        // 添加请求拦截器
+        client.addRequestInterceptor((config) => {
+          config.headers.Authorization = `Bearer ${token}`;
+          return config;
+        });
+
+    - name: "权限控制配置"
+      example: |
+        import { useAccess } from '@vben/access';
+
+        const { hasAccessByCodes, hasAccessByRoles } = useAccess();
+
+        // 权限码判断
+        if (hasAccessByCodes(['system:user:create'])) {
+          // 有权限
+        }
+
+        // 角色判断
+        if (hasAccessByRoles(['admin'])) {
+          // 是管理员
+        }
+
+# ============================================
+# 第四阶段：代码使用设计
+# ============================================
+code_patterns:
+  component_usage:
+    example: |
+      <!-- 布局使用示例 -->
+      <script setup lang="ts">
+      import { BasicLayout } from '@vben/layouts';
+      </script>
+
+      <template>
+        <BasicLayout>
+          <router-view />
+        </BasicLayout>
+      </template>
+
+  api_usage:
+    example: |
+      // 请求API使用示例
+      import { requestClient } from '#/api/request';
+
+      // GET请求
+      const data = await requestClient.get('/api/users');
+
+      // POST请求
+      await requestClient.post('/api/users', { name: 'test' });
+
+      // SSE流式请求
+      await requestClient.postSSE('/api/chat', { prompt }, (message) => {
+        console.log('收到消息:', message);
+      });
+
+  hook_usage:
+    example: |
+      // 分页Hook使用
+      import { usePagination } from '@vben/hooks';
+
+      const { pagination, setCurrentPage, setPageSize } = usePagination({
+        defaultCurrent: 1,
+        defaultPageSize: 10
+      });
+
+      // 字典Hook使用
+      import { useDict } from '@vben/hooks';
+
+      const { options, loading } = useDict('sys_normal_disable');
+
+  naming_conventions:
+    - convention: "Hook命名"
+      rule: "use前缀（如 usePagination）"
+    - convention: "组件命名"
+      rule: "PascalCase"
+    - convention: "布局目录"
+      rule: "basic/、authentication/、widgets/"
+
+# ============================================
+# 第五阶段：扩展指南
+# ============================================
+extension_guide:
+  new_feature:
+    title: "新增自定义Hook"
+    steps:
+      - step: "1. 创建Hook文件"
+        detail: "在 packages/effects/hooks/src/ 下创建 use-xxx.ts"
+      - step: "2. 实现Hook逻辑"
+        detail: "使用Vue组合式API实现功能"
+      - step: "3. 导出Hook"
+        detail: "在 index.ts 中导出"
+      - step: "4. 编写测试"
+        detail: "在 __tests__/ 下编写单元测试"
+
+  new_plugin:
+    title: "新增插件"
+    steps:
+      - step: "1. 创建插件目录"
+        detail: "在 packages/effects/plugins/src/ 下创建插件目录"
+      - step: "2. 实现插件"
+        detail: "实现插件的初始化和配置逻辑"
+      - step: "3. 导出插件"
+        detail: "在 index.ts 中导出"
+      - step: "4. 注册插件"
+        detail: "在应用的 plugins/index.ts 中注册"
+
+  best_practices:
+    - practice: "请求统一管理"
+      detail: "所有API请求通过requestClient，使用拦截器统一处理"
+    - practice: "权限前置判断"
+      detail: "使用v-access指令或hasAccessByCodes进行权限判断"
+    - practice: "布局组件复用"
+      detail: "使用BasicLayout和AuthLayout，避免重复代码"
+    - practice: "按需加载插件"
+      detail: "只引入需要的插件，减少打包体积"
+
+# ============================================
+# 关键文件清单
+# ============================================
+key_files:
+  - path: "packages/effects/request/src/request-client.ts"
+    purpose: "HTTP请求客户端"
+  - path: "packages/effects/access/src/use-access.ts"
+    purpose: "权限控制Hook"
+  - path: "packages/effects/layouts/src/basic/"
+    purpose: "主布局组件"
+  - path: "packages/effects/hooks/src/"
+    purpose: "自定义Hooks集合"
+  - path: "packages/effects/plugins/src/"
+    purpose: "插件系统"

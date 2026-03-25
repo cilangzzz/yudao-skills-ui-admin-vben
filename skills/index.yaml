@@ -1,0 +1,52 @@
+# Skill 索引文件
+# 记录所有模块的Skill文档位置和状态
+
+skills:
+  # 核心模块
+  core:
+    name: "核心包模块"
+    path: "skills/modules/core/skill-core.yaml"
+    status: "completed"
+    priority: 1
+    description: "包含@core/base、@core/composables、@core/preferences、@core/ui-kit"
+
+  effects:
+    name: "效应层模块"
+    path: "skills/modules/effects/skill-effects.yaml"
+    status: "completed"
+    priority: 1
+    description: "包含access、request、hooks、layouts、plugins、common-ui"
+
+  app-antd:
+    name: "Ant Design应用模块"
+    path: "skills/modules/app-antd/skill-app-antd.yaml"
+    status: "completed"
+    priority: 1
+    description: "web-antd应用的目录结构、路由、状态管理、API层"
+
+# 技术栈
+tech_stack:
+  vue: "3.5.30"
+  vite: "8.0.1"
+  typescript: "5.9.3"
+  pinia: "3.0.4"
+  tailwindcss: "4.2.2"
+
+# 架构类型
+architecture:
+  type: "Monorepo"
+  package_manager: "pnpm@10.32.1"
+  build_tool: "Turborepo@2.8.20"
+
+# 提取进度
+progress:
+  total: 3
+  completed: 3
+  in_progress: 0
+  pending: 0
+
+# 最后更新时间
+metadata:
+  created_at: "2026-03-25"
+  updated_at: "2026-03-25"
+  completed_at: "2026-03-25"

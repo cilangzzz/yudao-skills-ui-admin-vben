@@ -1,0 +1,136 @@
+# Skill 模板文件 - 前端版本
+# 用于提取模块知识的标准格式
+
+skill:
+  id: "skill-{module}"
+  name: "{模块名称} Skill"
+  version: "1.0.0"
+  module_path: "{模块路径}"
+  created_at: ""
+  updated_at: ""
+
+# ============================================
+# 第一阶段：设计理念
+# ============================================
+philosophy:
+  # 业务定位
+  business_position: ""
+
+  # 设计原则
+  design_principles:
+    - principle: ""
+      description: ""
+
+  # 技术选型理由
+  tech_choices:
+    - choice: ""
+      reason: ""
+
+# ============================================
+# 第二阶段：架构设计
+# ============================================
+architecture:
+  # 目录结构
+  directory_structure:
+    layers:
+      - name: ""
+        modules: []
+        purpose: ""
+
+  # 模块依赖
+  dependencies:
+    internal:
+      - package: ""
+        purpose: ""
+    external:
+      - package: ""
+        version: ""
+        purpose: ""
+
+  # 设计模式
+  design_patterns:
+    - pattern: ""
+      location: ""
+      purpose: ""
+
+# ============================================
+# 第三阶段：核心实现
+# ============================================
+implementation:
+  # 类型定义
+  types:
+    - name: ""
+      file: ""
+      description: ""
+
+  # 核心组件
+  components:
+    - name: ""
+      package: ""
+      description: ""
+
+  # 核心函数
+  functions:
+    - name: ""
+      file: ""
+      description: ""
+
+  # 配置项
+  configurations:
+    - name: ""
+      example: ""
+
+# ============================================
+# 第四阶段：代码使用设计
+# ============================================
+code_patterns:
+  # 组件使用规范
+  component_usage:
+    example: ""
+
+  # API调用规范
+  api_usage:
+    example: ""
+
+  # Hook使用规范
+  hook_usage:
+    example: ""
+
+  # 样式规范
+  style_usage:
+    example: ""
+
+  # 命名规范
+  naming_conventions:
+    - convention: ""
+      rule: ""
+
+# ============================================
+# 第五阶段：扩展指南
+# ============================================
+extension_guide:
+  # 新增功能步骤
+  new_feature:
+    title: "新增业务功能"
+    steps:
+      - step: ""
+        detail: ""
+
+  # 新增组件示例
+  new_component:
+    title: "新增组件"
+    steps:
+      - step: ""
+        detail: ""
+
+  # 最佳实践
+  best_practices:
+    - practice: ""
+      detail: ""
+
+# ============================================
+# 关键文件清单
+# ============================================
+key_files:
+  - path: ""
+    purpose: ""

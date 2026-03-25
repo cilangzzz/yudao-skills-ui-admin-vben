@@ -1,0 +1,290 @@
+# Skill 文档 - 核心包模块
+# packages/@core 完整知识提取
+
+skill:
+  id: "skill-core"
+  name: "Core Package Skill"
+  version: "1.0.0"
+  module_path: "packages/@core"
+  created_at: "2026-03-25"
+  updated_at: "2026-03-25"
+
+# ============================================
+# 第一阶段：设计理念
+# ============================================
+philosophy:
+  business_position: |
+    @core 是整个前端架构的核心层，提供UI框架无关的基础设施：
+    - base/: 设计系统基础（BEM命名、图标、工具函数、类型定义）
+    - composables/: Vue组合式函数（useNamespace、useIsMobile等）
+    - preferences/: 偏好设置系统（应用配置、主题、布局等）
+    - ui-kit/: UI无关组件抽象（form-ui、popup-ui、menu-ui等）
+
+    该层不依赖任何具体UI框架，通过 reka-ui 实现无头组件模式。
+
+  design_principles:
+    - principle: "UI框架无关"
+      description: "核心组件不依赖Ant Design Vue等具体UI库，通过抽象层实现多框架支持"
+    - principle: "无头组件模式"
+      description: "使用reka-ui作为无头组件基础，提供可访问性和交互逻辑，样式由具体UI层提供"
+    - principle: "BEM命名规范"
+      description: "CSS类名采用Block__Element--Modifier命名，确保可预测性和可维护性"
+    - principle: "类型安全"
+      description: "完整的TypeScript类型定义，严格模式配置"
+    - principle: "响应式设计"
+      description: "基于Vue 3响应式系统，支持组合式API"
+
+  tech_choices:
+    - choice: "reka-ui"
+      reason: "无头组件库，提供可访问性和交互逻辑，与具体UI框架解耦"
+    - choice: "@tanstack/vue-store"
+      reason: "轻量级状态管理，用于组件内部状态"
+    - choice: "vee-validate + zod"
+      reason: "强大的表单验证方案，支持Schema验证"
+
+# ============================================
+# 第二阶段：架构设计
+# ============================================
+architecture:
+  directory_structure:
+    layers:
+      - name: "@core/base/"
+        modules: ["design/", "icons/", "shared/", "typings/"]
+        purpose: "基础设计系统"
+      - name: "@core/composables/"
+        modules: ["use-namespace.ts", "use-is-mobile.ts", "use-priority-value.ts"]
+        purpose: "组合式函数"
+      - name: "@core/preferences/"
+        modules: ["preferences.ts", "types.ts", "use-preferences.ts"]
+        purpose: "偏好设置系统"
+      - name: "@core/ui-kit/"
+        modules: ["form-ui/", "popup-ui/", "menu-ui/", "layout-ui/", "shadcn-ui/", "tabs-ui/"]
+        purpose: "UI无关组件抽象"
+
+  dependencies:
+    internal:
+      - package: "@vben-core/shared"
+        purpose: "工具函数、常量"
+      - package: "@vben-core/typings"
+        purpose: "类型定义"
+    external:
+      - package: "reka-ui"
+        version: "^2.9.2"
+        purpose: "无头组件基础"
+      - package: "lucide-vue-next"
+        version: "^0.577.0"
+        purpose: "图标库"
+      - package: "vee-validate"
+        version: "^4.15.1"
+        purpose: "表单验证"
+      - package: "zod"
+        version: "^3.25.76"
+        purpose: "Schema验证"
+
+  design_patterns:
+    - pattern: "单例模式"
+      location: "@core/base/shared/src/global-state.ts"
+      purpose: "全局共享状态管理"
+    - pattern: "Builder模式"
+      location: "@core/ui-kit/form-ui"
+      purpose: "通过Schema配置构建表单"
+    - pattern: "命令模式"
+      location: "@core/ui-kit/popup-ui"
+      purpose: "ModalApi/DrawerApi程序化控制弹窗"
+    - pattern: "工厂模式"
+      location: "@core/base/icons/src/create-icon.ts"
+      purpose: "动态创建图标组件"
+    - pattern: "观察者模式"
+      location: "@core/preferences"
+      purpose: "状态订阅和偏好设置变更监听"
+
+# ============================================
+# 第三阶段：核心实现
+# ============================================
+implementation:
+  types:
+    - name: "MenuRecordRaw"
+      file: "@core/base/typings/src/menu-record.ts"
+      description: "菜单项类型定义"
+    - name: "Preferences"
+      file: "@core/preferences/src/types.ts"
+      description: "应用偏好设置类型"
+    - name: "FormSchema"
+      file: "@core/ui-kit/form-ui/src/types.ts"
+      description: "表单Schema配置类型"
+    - name: "ModalState"
+      file: "@core/ui-kit/popup-ui/src/types.ts"
+      description: "弹窗状态类型"
+
+  components:
+    - name: "VbenForm"
+      package: "@core/ui-kit/form-ui"
+      description: "Schema驱动的表单组件"
+    - name: "VbenModal / VbenDrawer"
+      package: "@core/ui-kit/popup-ui"
+      description: "弹窗/抽屉组件"
+    - name: "Menu"
+      package: "@core/ui-kit/menu-ui"
+      description: "菜单组件"
+    - name: "Button, Input, Select..."
+      package: "@core/ui-kit/shadcn-ui"
+      description: "基础UI组件"
+
+  functions:
+    - name: "useNamespace(block)"
+      file: "@core/composables/src/use-namespace.ts"
+      description: "BEM类名生成器，返回b(), e(), m()等方法"
+    - name: "useIsMobile()"
+      file: "@core/composables/src/use-is-mobile.ts"
+      description: "响应式移动端检测"
+    - name: "usePriorityValue()"
+      file: "@core/composables/src/use-priority-value.ts"
+      description: "优先级值获取（插槽 > attrs > props > state）"
+    - name: "cn(...classes)"
+      file: "@core/base/shared/src/utils/cn.ts"
+      description: "类名合并（clsx + tailwind-merge）"
+
+  configurations:
+    - name: "Preferences初始化"
+      example: |
+        import { preferencesManager } from '@vben/preferences';
+
+        await preferencesManager.initPreferences({
+          namespace: 'vben-admin',
+          overrides: { theme: { mode: 'dark' } }
+        });
+    - name: "表单Schema配置"
+      example: |
+        const schema: FormSchema[] = [
+          {
+            component: 'Input',
+            fieldName: 'username',
+            label: '用户名',
+            rules: 'required'
+          }
+        ];
+
+# ============================================
+# 第四阶段：代码使用设计
+# ============================================
+code_patterns:
+  component_usage:
+    example: |
+      <!-- 表单使用示例 -->
+      <script setup lang="ts">
+      import { useVbenForm } from '@vben-core/form-ui';
+
+      const [BaseForm, formApi] = useVbenForm({
+        schema: [
+          { component: 'Input', fieldName: 'name', label: '名称' }
+        ],
+        onSubmit: async (values) => {
+          console.log(values);
+        }
+      });
+      </script>
+
+      <template>
+        <BaseForm />
+      </template>
+
+  api_usage:
+    example: |
+      // Modal API 使用示例
+      import { useVbenModal } from '@vben-core/popup-ui';
+
+      const [Modal, modalApi] = useVbenModal({
+        onConfirm: async () => {
+          const data = modalApi.getData();
+          await submitForm(data);
+          modalApi.close();
+        }
+      });
+
+      // 打开弹窗
+      modalApi.setData({ id: 1 }).open();
+
+  style_usage:
+    example: |
+      <!-- BEM命名示例 -->
+      <script setup lang="ts">
+      import { useNamespace } from '@vben-core/composables';
+
+      const { b, e, m } = useNamespace('button');
+      // b() → 'vben-button'
+      // e('icon') → 'vben-button__icon'
+      // m('primary') → 'vben-button--primary'
+      </script>
+
+      <template>
+        <button :class="[b(), m('primary')]">
+          <span :class="e('icon')">...</span>
+        </button>
+      </template>
+
+  naming_conventions:
+    - convention: "文件命名"
+      rule: "kebab-case（如 use-namespace.ts）"
+    - convention: "组件命名"
+      rule: "PascalCase（如 VbenForm）"
+    - convention: "组合式函数"
+      rule: "use前缀（如 useNamespace）"
+    - convention: "类型文件"
+      rule: "typing.ts 或 types.ts"
+
+# ============================================
+# 第五阶段：扩展指南
+# ============================================
+extension_guide:
+  new_feature:
+    title: "新增核心组件"
+    steps:
+      - step: "1. 创建组件目录"
+        detail: "在 packages/@core/ui-kit/ 下创建新目录，如 my-ui/"
+      - step: "2. 定义类型"
+        detail: "创建 types.ts 定义 Props 和 State 类型"
+      - step: "3. 实现组件"
+        detail: "使用 reka-ui 实现无头组件逻辑，样式使用 Tailwind CSS"
+      - step: "4. 导出组件"
+        detail: "在 index.ts 中导出组件和API"
+      - step: "5. 编写测试"
+        detail: "在 __tests__/ 下编写单元测试"
+
+  new_component:
+    title: "新增表单组件适配器"
+    steps:
+      - step: "1. 定义组件类型"
+        detail: "在 form-ui/src/types.ts 的 BaseFormComponentType 中添加类型"
+      - step: "2. 创建适配器"
+        detail: "在应用层 adapter/form.ts 中创建组件映射"
+      - step: "3. 注册适配器"
+        detail: "在 adapter/index.ts 中注册"
+
+  best_practices:
+    - practice: "保持UI无关性"
+      detail: "核心组件不应依赖具体UI框架，使用reka-ui实现交互逻辑"
+    - practice: "类型优先"
+      detail: "先定义类型，再实现功能，确保类型安全"
+    - practice: "单一职责"
+      detail: "每个组合式函数只做一件事，保持可复用性"
+    - practice: "使用BEM命名"
+      detail: "CSS类名使用BEM规范，避免样式冲突"
+    - practice: "提供API模式"
+      detail: "复杂组件（Modal、Form）提供API类进行程序化控制"
+
+# ============================================
+# 关键文件清单
+# ============================================
+key_files:
+  - path: "packages/@core/base/shared/src/utils/"
+    purpose: "核心工具函数（cn、merge、diff、tree等）"
+  - path: "packages/@core/base/typings/src/menu-record.ts"
+    purpose: "菜单类型定义"
+  - path: "packages/@core/composables/src/use-namespace.ts"
+    purpose: "BEM类名生成器"
+  - path: "packages/@core/preferences/src/preferences.ts"
+    purpose: "偏好设置管理器"
+  - path: "packages/@core/ui-kit/form-ui/src/form-api.ts"
+    purpose: "表单API类"
+  - path: "packages/@core/ui-kit/popup-ui/src/modal-api.ts"
+    purpose: "弹窗API类"
