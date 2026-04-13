@@ -472,8 +472,8 @@ catalogs:
       specifier: ^0.1.0
       version: 0.1.0
     tinymce:
-      specifier: ^7.3.0
-      version: 7.9.2
+      specifier: ^8.3.2
+      version: 8.3.2
     tippy.js:
       specifier: ^6.3.7
       version: 6.3.7
@@ -713,7 +713,7 @@ importers:
         version: 3.4.0(vue@3.5.30(typescript@5.9.3))
       '@tinymce/tinymce-vue':
         specifier: 'catalog:'
-        version: 6.3.0(tinymce@7.9.2)(vue@3.5.30(typescript@5.9.3))
+        version: 6.3.0(tinymce@8.3.2)(vue@3.5.30(typescript@5.9.3))
       '@vben/access':
         specifier: workspace:*
         version: link:../../packages/effects/access
@@ -806,7 +806,7 @@ importers:
         version: 0.1.0
       tinymce:
         specifier: 'catalog:'
-        version: 7.9.2
+        version: 8.3.2
       video.js:
         specifier: 'catalog:'
         version: 7.21.7
@@ -902,7 +902,7 @@ importers:
         version: 3.2.38(vue@3.5.30(typescript@5.9.3))
       '@tinymce/tinymce-vue':
         specifier: 'catalog:'
-        version: 6.3.0(tinymce@7.9.2)(vue@3.5.30(typescript@5.9.3))
+        version: 6.3.0(tinymce@8.3.2)(vue@3.5.30(typescript@5.9.3))
       '@vben/access':
         specifier: workspace:*
         version: link:../../packages/effects/access
@@ -995,7 +995,7 @@ importers:
         version: 0.1.0
       tinymce:
         specifier: 'catalog:'
-        version: 7.9.2
+        version: 8.3.2
       video.js:
         specifier: 'catalog:'
         version: 7.21.7
@@ -1092,7 +1092,7 @@ importers:
     dependencies:
       '@tinymce/tinymce-vue':
         specifier: 'catalog:'
-        version: 6.3.0(tinymce@7.9.2)(vue@3.5.30(typescript@5.9.3))
+        version: 6.3.0(tinymce@8.3.2)(vue@3.5.30(typescript@5.9.3))
       '@vben/access':
         specifier: workspace:*
         version: link:../../packages/effects/access
@@ -1155,7 +1155,7 @@ importers:
         version: 1.18.5(vue@3.5.30(typescript@5.9.3))
       tinymce:
         specifier: 'catalog:'
-        version: 7.9.2
+        version: 8.3.2
       vue:
         specifier: ^3.5.30
         version: 3.5.30(typescript@5.9.3)
@@ -11130,8 +11130,8 @@ packages:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
     engines: {node: '>=12.0.0'}
 
-  tinymce@7.9.2:
-    resolution: {integrity: sha512-zS2gn2CPQmZhUqLzkhwYH+WGsx/DIRY/mS18RVzsIcuQg2lN2uzaqoHSJU6DdMUpvXBtBFnLNpumC3QrDwLBzA==}
+  tinymce@8.3.2:
+    resolution: {integrity: sha512-iZ8aIUtrgGOw2AkukNf8spUM0LOzNLoCHRepwXQwWmHxP2TI5LzHjjG0SmXGxbya4EmoD5/pAox0ZXJfLO5DUw==}
 
   tinypool@2.1.0:
     resolution: {integrity: sha512-Pugqs6M0m7Lv1I7FtxN4aoyToKg1C4tu+/381vH35y8oENM/Ai7f7C4StcoK4/+BSw9ebcS8jRiVrORFKCALLw==}
@@ -15398,11 +15398,11 @@ snapshots:
     transitivePeerDependencies:
       - svelte
 
-  '@tinymce/tinymce-vue@6.3.0(tinymce@7.9.2)(vue@3.5.30(typescript@5.9.3))':
+  '@tinymce/tinymce-vue@6.3.0(tinymce@8.3.2)(vue@3.5.30(typescript@5.9.3))':
     dependencies:
       vue: 3.5.30(typescript@5.9.3)
     optionalDependencies:
-      tinymce: 7.9.2
+      tinymce: 8.3.2
 
   '@tsdown/css@0.21.4(jiti@2.6.1)(postcss@8.5.8)(sass-embedded@1.98.0)(sass@1.98.0)(tsdown@0.21.4)(yaml@2.8.3)':
     dependencies:
@@ -21788,7 +21788,7 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
 
-  tinymce@7.9.2: {}
+  tinymce@8.3.2: {}
 
   tinypool@2.1.0: {}
 
