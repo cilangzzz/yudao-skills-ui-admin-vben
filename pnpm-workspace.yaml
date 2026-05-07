@@ -120,7 +120,7 @@ catalog:
   eslint-plugin-vue: ^10.8.0
   eslint-plugin-yml: ^3.3.1
   execa: ^9.6.1
-  fast-xml-parser: ^4.5.4
+  fast-xml-parser: ^5.5.9
   find-up: ^8.0.0
   get-port: ^7.1.0
   globals: ^17.4.0
