@@ -13,8 +13,11 @@ import { getWarehouseSimpleList } from '#/api/erp/stock/warehouse';
 import { getSimpleUserList } from '#/api/system/user';
 import { getRangePickerDefaultProps } from '#/utils';
 
+/** 表单类型 */
+export type FormType = 'create' | 'detail' | 'edit';
+
 /** 表单的配置项 */
-export function useFormSchema(formType: string): VbenFormSchema[] {
+export function useFormSchema(formType: FormType): VbenFormSchema[] {
   return [
     {
       fieldName: 'id',
@@ -67,10 +70,8 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getCustomerSimpleList,
-        fieldNames: {
-          label: 'name',
-          value: 'id',
-        },
+        labelField: 'name',
+        valueField: 'id',
       },
       rules: 'required',
     },
@@ -83,10 +84,8 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getSimpleUserList,
-        fieldNames: {
-          label: 'nickname',
-          value: 'id',
-        },
+        labelField: 'nickname',
+        valueField: 'id',
       },
     },
     {
@@ -201,10 +200,8 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getAccountSimpleList,
-        fieldNames: {
-          label: 'name',
-          value: 'id',
-        },
+        labelField: 'name',
+        valueField: 'id',
       },
     },
     {
@@ -353,10 +350,8 @@ export function useGridFormSchema(): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getProductSimpleList,
-        fieldNames: {
-          label: 'name',
-          value: 'id',
-        },
+        labelField: 'name',
+        valueField: 'id',
       },
     },
     {
@@ -377,10 +372,8 @@ export function useGridFormSchema(): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getCustomerSimpleList,
-        fieldNames: {
-          label: 'name',
-          value: 'id',
-        },
+        labelField: 'name',
+        valueField: 'id',
       },
     },
     {
@@ -405,10 +398,8 @@ export function useGridFormSchema(): VbenFormSchema[] {
         allowClear: true,
         showSearch: true,
         api: getSimpleUserList,
-        fieldNames: {
-          label: 'nickname',
-          value: 'id',
-        },
+        labelField: 'nickname',
+        valueField: 'id',
       },
     },
     {

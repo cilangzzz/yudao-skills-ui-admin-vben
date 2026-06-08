@@ -13,8 +13,11 @@ import { getWarehouseSimpleList } from '#/api/erp/stock/warehouse';
 import { getSimpleUserList } from '#/api/system/user';
 import { getRangePickerDefaultProps } from '#/utils';
 
+/** 表单类型 */
+export type FormType = 'create' | 'detail' | 'edit';
+
 /** 表单的配置项 */
-export function useFormSchema(formType: string): VbenFormSchema[] {
+export function useFormSchema(formType: FormType): VbenFormSchema[] {
   return [
     {
       fieldName: 'id',
@@ -117,6 +120,7 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
       label: '优惠率(%)',
       component: 'InputNumber',
       componentProps: {
+        class: '!w-full',
         placeholder: '请输入优惠率',
         min: 0,
         max: 100,
@@ -129,6 +133,7 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
       label: '退款优惠',
       component: 'InputNumber',
       componentProps: {
+        class: '!w-full',
         precision: 2,
         formatter: erpPriceInputFormatter,
         disabled: true,
@@ -139,6 +144,7 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
       label: '优惠后金额',
       component: 'InputNumber',
       componentProps: {
+        class: '!w-full',
         placeholder: '优惠后金额',
         precision: 2,
         formatter: erpPriceInputFormatter,
@@ -159,6 +165,7 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
       label: '其他费用',
       component: 'InputNumber',
       componentProps: {
+        class: '!w-full',
         disabled: formType === 'detail',
         placeholder: '请输入其他费用',
         precision: 2,
@@ -183,6 +190,7 @@ export function useFormSchema(formType: string): VbenFormSchema[] {
       label: '应退金额',
       component: 'InputNumber',
       componentProps: {
+        class: '!w-full',
         precision: 2,
         min: 0,
         disabled: true,

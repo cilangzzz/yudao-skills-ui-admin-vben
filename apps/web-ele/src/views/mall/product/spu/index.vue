@@ -106,26 +106,21 @@ async function handleStatusChange(
   newStatus: number,
   row: MallSpuApi.Spu,
 ): Promise<boolean | undefined> {
-  return new Promise((resolve, reject) => {
-    // 二次确认
-    const text = newStatus ? '上架' : '下架';
-    confirm({
-      content: `确认要${text + row.name}吗?`,
-    })
-      .then(async () => {
-        // 更新状态
-        await updateStatus({
-          id: row.id!,
-          status: newStatus,
-        });
-        // 提示并返回成功
-        ElMessage.success(`${text}成功`);
-        resolve(true);
-      })
-      .catch(() => {
-        reject(new Error('取消操作'));
-      });
+  // 二次确认
+  const text = newStatus ? '上架' : '下架';
+  try {
+    await confirm(`确认要${text + row.name}吗?`);
+  } catch {
+    return false;
+  }
+  // 更新状态
+  await updateStatus({
+    id: row.id!,
+    status: newStatus,
   });
+  // 提示并返回成功
+  ElMessage.success(`${text}成功`);
+  return true;
 }
 
 /** 添加到仓库 / 回收站的状态 */
@@ -134,9 +129,7 @@ async function handleStatus02Change(row: MallSpuApi.Spu, newStatus: number) {
     newStatus === ProductSpuStatusEnum.RECYCLE.status
       ? '加入到回收站'
       : '恢复到仓库';
-  await confirm({
-    content: `确认要"${row.name}"${text}吗？`,
-  });
+  await confirm(`确认要"${row.name}"${text}吗？`);
   const loadingInstance = ElLoading.service({
     text: `正在${text}中...`,
   });

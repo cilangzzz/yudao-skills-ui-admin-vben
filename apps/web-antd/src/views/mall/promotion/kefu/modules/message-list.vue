@@ -6,7 +6,7 @@ import type { MallKefuMessageApi } from '#/api/mall/promotion/kefu/message';
 
 import { computed, reactive, ref, toRefs, unref, watch } from 'vue';
 
-import { UserTypeEnum } from '@vben/constants';
+import { KeFuMessageContentTypeEnum, UserTypeEnum } from '@vben/constants';
 import { IconifyIcon } from '@vben/icons';
 import { formatDate, isEmpty, jsonParse } from '@vben/utils';
 
@@ -25,7 +25,6 @@ import { useMallKefuStore } from '#/store/mall/kefu';
 import MessageItem from './message/message-item.vue';
 import OrderItem from './message/order-item.vue';
 import ProductItem from './message/product-item.vue';
-import { KeFuMessageContentTypeEnum } from './tools/constants';
 import { useEmoji } from './tools/emoji';
 import EmojiSelectPopover from './tools/emoji-select-popover.vue';
 import PictureSelectUpload from './tools/picture-select-upload.vue';
@@ -51,7 +50,7 @@ const loadHistory = ref(false); // 加载历史消息
 
 /** 获悉消息内容 */
 const getMessageContent = computed(
-  () =>  (item: any) => jsonParse(item.content),
+  () => (item: any) => jsonParse(item.content),
 );
 
 /** 获得消息列表 */

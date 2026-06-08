@@ -42,6 +42,7 @@ const props = defineProps({
 // 当前节点
 const currentNode = useWatchNode(props);
 // 节点名称
+// @ts-expect-error unused
 const { nodeName, showInput, clickIcon, changeNodeName, inputRef } =
   useNodeName(BpmNodeTypeEnum.DELAY_TIMER_NODE);
 // 抄送人表单配置
@@ -82,12 +83,12 @@ function getShowText(): string {
 
 // 获取ISO时间格式
 function getIsoTimeDuration() {
-  let strTimeDuration = 'PT';
+  let strTimeDuration = 'P';
   if (configForm.value.timeUnit === TimeUnitType.MINUTE) {
-    strTimeDuration += `${configForm.value.timeDuration}M`;
+    strTimeDuration += `T${configForm.value.timeDuration}M`;
   }
   if (configForm.value.timeUnit === TimeUnitType.HOUR) {
-    strTimeDuration += `${configForm.value.timeDuration}H`;
+    strTimeDuration += `T${configForm.value.timeDuration}H`;
   }
   if (configForm.value.timeUnit === TimeUnitType.DAY) {
     strTimeDuration += `${configForm.value.timeDuration}D`;
@@ -133,7 +134,7 @@ function openDrawer(node: SimpleFlowNode) {
     // 固定时长
     if (configForm.value.delayType === DelayTypeEnum.FIXED_TIME_DURATION) {
       const strTimeDuration = node.delaySetting.delayTime;
-      const parseTime = strTimeDuration.slice(2, -1);
+      const parseTime = strTimeDuration.match(/\d+/)?.[0] ?? '';
       const parseTimeUnit = strTimeDuration.slice(-1);
       configForm.value.timeDuration = Number.parseInt(parseTime);
       configForm.value.timeUnit = convertTimeUnit(parseTimeUnit);

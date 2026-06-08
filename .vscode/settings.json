@@ -38,7 +38,7 @@
 
   // lint && format
   "oxc.enable": true,
-  "oxc.typeAware": true,
+  "oxc.typeAware": false,
   "oxc.configPath": "oxlint.config.ts",
   "oxc.fmt.configPath": "oxfmt.config.ts",
   "eslint.useFlatConfig": true,
@@ -181,9 +181,10 @@
   "stylelint.customSyntax": "postcss-html",
   "stylelint.snippet": ["css", "less", "postcss", "scss", "vue"],
 
-  "typescript.inlayHints.enumMemberValues.enabled": true,
-  "typescript.preferences.preferTypeOnlyAutoImports": true,
-  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "js/ts.preferences.includePackageJsonAutoImports": "on",
 
   "eslint.validate": [
     "javascript",
@@ -236,6 +237,5 @@
   },
   "commentTranslate.hover.enabled": false,
   "commentTranslate.multiLineMerge": true,
-  "vue.server.hybridMode": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "vue.server.hybridMode": true
 }

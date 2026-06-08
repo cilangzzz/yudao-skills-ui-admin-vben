@@ -25,9 +25,11 @@
   },
   "type": "module",
   "scripts": {
+    "bootstrap": "pnpm install",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 turbo build",
     "build:analyze": "turbo build:analyze",
     "build:antd": "pnpm run build --filter=@vben/web-antd",
+    "build:antdv-next": "pnpm run build --filter=@vben/web-antdv-next",
     "build:docker": "./scripts/deploy/build-local-docker-image.sh",
     "build:docs": "pnpm run build --filter=@vben/docs",
     "build:ele": "pnpm run build --filter=@vben/web-ele",
@@ -50,22 +52,21 @@
     "dev:tdesign": "pnpm -F @vben/web-tdesign run dev",
     "format": "vsh lint --format",
     "lint": "vsh lint",
-    "postinstall": "pnpm -r run stub --if-present",
+    "postinstall": "pnpm -r run --if-present stub",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "pnpm exec lefthook install",
+    "prepare": "is-ci || pnpm exec lefthook install",
     "preview": "turbo-run preview",
     "publint": "vsh publint",
-    "reinstall": "pnpm clean --del-lock && pnpm install",
+    "reinstall": "pnpm run clean -- --del-lock && pnpm install",
     "test:unit": "vitest run --dom",
     "test:e2e": "turbo run test:e2e",
     "update:deps": "npx taze -r -w",
     "version": "pnpm exec changeset version && pnpm install --no-frozen-lockfile",
-    "catalog": "pnpx codemod pnpm/catalog"
+    "catalog": "pnpm dlx codemod pnpm/catalog"
   },
   "devDependencies": {
     "@changesets/changelog-github": "catalog:",
     "@changesets/cli": "catalog:",
-    "@playwright/test": "catalog:",
     "@tsdown/css": "catalog:",
     "@types/node": "catalog:",
     "@vben/commitlint-config": "workspace:*",
@@ -80,9 +81,9 @@
     "@vben/vsh": "workspace:*",
     "@vitejs/plugin-vue": "catalog:",
     "@vitejs/plugin-vue-jsx": "catalog:",
-    "@vue/test-utils": "catalog:",
     "cross-env": "catalog:",
     "cspell": "catalog:",
+    "eslint": "catalog:",
     "happy-dom": "catalog:",
     "is-ci": "catalog:",
     "lefthook": "catalog:",
@@ -95,15 +96,14 @@
     "tsdown": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "unplugin-vue": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
     "vue": "catalog:",
     "vue-tsc": "catalog:"
   },
   "engines": {
-    "node": "^20.19.0 || ^22.18.0 || ^24.0.0",
-    "pnpm": ">=10.0.0"
+    "node": "^22.18.0 || ^24.0.0",
+    "pnpm": ">=11.0.0"
   },
-  "packageManager": "pnpm@10.32.1"
+  "packageManager": "pnpm@11.5.2"
 }

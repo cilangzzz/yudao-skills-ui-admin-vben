@@ -192,7 +192,7 @@ const resetTaskForm = () => {
 
   // 改用通过extensionElements来存储数据
 
-  // if (businessObject.candidateStrategy != undefined) {
+  // if (businessObject.candidateStrategy !== undefined) {
   //   userTaskForm.value.candidateStrategy = parseInt(
   //     businessObject.candidateStrategy,
   //   ) as any;
@@ -399,6 +399,7 @@ onBeforeUnmount(() => {
         ref="treeRef"
         v-model="userTaskForm.candidateParam"
         :data="deptTreeOptions"
+        node-key="id"
         :props="defaultProps"
         placeholder="加载中，请稍后"
         multiple

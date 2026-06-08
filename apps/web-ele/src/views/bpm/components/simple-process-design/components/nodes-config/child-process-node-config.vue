@@ -50,6 +50,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 // 当前节点
 const currentNode = useWatchNode(props);
 /** 节点名称配置 */
+// @ts-expect-error unused
 const { nodeName, showInput, clickIcon, changeNodeName, inputRef } =
   useNodeName(BpmNodeTypeEnum.CHILD_PROCESS_NODE);
 // 激活的 Tab 标签页
@@ -279,7 +280,7 @@ const showChildProcessNodeConfig = (node: SimpleFlowNode) => {
       if (configForm.value.timeoutType === DelayTypeEnum.FIXED_TIME_DURATION) {
         const strTimeDuration =
           node.childProcessSetting.timeoutSetting.timeExpression ?? '';
-        const parseTime = strTimeDuration.slice(2, -1);
+        const parseTime = strTimeDuration.match(/\d+/)?.[0] ?? '';
         const parseTimeUnit = strTimeDuration.slice(-1);
         configForm.value.timeDuration = Number.parseInt(parseTime);
         configForm.value.timeUnit = convertTimeUnit(parseTimeUnit);
@@ -345,12 +346,12 @@ const loadFormInfo = async () => {
 };
 
 const getIsoTimeDuration = () => {
-  let strTimeDuration = 'PT';
+  let strTimeDuration = 'P';
   if (configForm.value.timeUnit === TimeUnitType.MINUTE) {
-    strTimeDuration += `${configForm.value.timeDuration}M`;
+    strTimeDuration += `T${configForm.value.timeDuration}M`;
   }
   if (configForm.value.timeUnit === TimeUnitType.HOUR) {
-    strTimeDuration += `${configForm.value.timeDuration}H`;
+    strTimeDuration += `T${configForm.value.timeDuration}H`;
   }
   if (configForm.value.timeUnit === TimeUnitType.DAY) {
     strTimeDuration += `${configForm.value.timeDuration}D`;

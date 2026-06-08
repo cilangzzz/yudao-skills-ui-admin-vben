@@ -79,6 +79,13 @@ const emits = defineEmits<{
   findReturnTaskNodes: [nodeList: SimpleFlowNode[]];
 }>();
 
+// 定义 TreeSelect 的默认属性映射
+const defaultProps = {
+  children: 'children',
+  label: 'name',
+  value: 'id',
+};
+
 const deptLevelLabel = computed(() => {
   let label = '部门负责人来源';
   if (
@@ -111,6 +118,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 // TODO @jason：和 antd 对应的文件，逻辑有点不一样；
 
 // 节点名称配置
+// @ts-expect-error unused
 const { nodeName, showInput, clickIcon, changeNodeName, inputRef } =
   useNodeName(BpmNodeTypeEnum.USER_TASK_NODE);
 
@@ -394,7 +402,7 @@ function showUserTaskNodeConfig(node: SimpleFlowNode) {
   configForm.value.timeoutHandlerEnable = node.timeoutHandler?.enable;
   if (node.timeoutHandler?.enable && node.timeoutHandler?.timeDuration) {
     const strTimeDuration = node.timeoutHandler.timeDuration;
-    const parseTime = strTimeDuration.slice(2, -1);
+    const parseTime = strTimeDuration.match(/\d+/)?.[0] ?? '';
     const parseTimeUnit = strTimeDuration.slice(-1);
     configForm.value.timeDuration = Number.parseInt(parseTime);
     timeUnit.value = convertTimeUnit(parseTimeUnit);
@@ -693,12 +701,9 @@ onMounted(() => {
             >
               <ElTreeSelect
                 v-model="configForm.deptIds"
-                :tree-data="deptTreeOptions"
-                :field-names="{
-                  label: 'name',
-                  value: 'id',
-                  children: 'children',
-                }"
+                :data="deptTreeOptions"
+                node-key="id"
+                :props="defaultProps"
                 empty-text="加载中，请稍等..."
                 multiple
                 :check-strictly="true"
